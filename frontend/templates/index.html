@@ -1,224 +1,453 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Smart Retail AI — Sales Prediction</title>
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet">
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
-    :root{
-      --bg-1:#071029;
-      --bg-2:#0b2540;
-      --card:rgba(255,255,255,0.04);
-      --accent:#58A6FF;
-      --accent-2:#6EE7B7;
-      --muted:#9fb3c8;
-      --glass:rgba(255,255,255,0.03);
-      --glass-2:rgba(255,255,255,0.02);
+    :root {
+      --bg-1: #071029;
+      --bg-2: #0b2540;
+      --card: rgba(255, 255, 255, 0.04);
+      --accent: #58A6FF;
+      --accent-2: #6EE7B7;
+      --muted: #9fb3c8;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-2: rgba(255, 255, 255, 0.02);
     }
 
-    body{
-      margin:0;
-      background:linear-gradient(180deg,var(--bg-1),var(--bg-2));
-      font-family:'Poppins',sans-serif;
-      color:#e6f0fb;
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      font-family: 'Poppins', sans-serif;
+      color: #e6f0fb;
+      overflow-x: hidden;
     }
 
-    nav{
-      backdrop-filter:blur(6px);
-      background:linear-gradient(90deg,rgba(0,0,0,0.25),rgba(255,255,255,0.02));
-      padding:14px 28px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      position:sticky;
-      top:0;
-      z-index:50;
+    nav {
+      backdrop-filter: blur(10px);
+      background: rgba(7, 16, 41, 0.8);
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .hero{
-      min-height:60vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      position:relative;
-      padding:48px 20px;
-      text-align:center;
+    .nav-links {
+      display: flex;
+      gap: 25px;
     }
 
-    .sandwich{
-      background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));
-      padding:18px;
-      width:360px;
-      border-radius:14px;
-      cursor:pointer;
-      box-shadow:0 12px 40px rgba(2,6,23,0.6);
-      transition:.3s;
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: 0.3s;
+      font-weight: 500;
     }
 
-    .sandwich:hover{
-      transform:translateY(-10px);
-      box-shadow:0 20px 60px rgba(2,6,23,0.8);
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      width: 25px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .hero {
+      min-height: 70vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .hero h2 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, #fff, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sandwich {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      transition: .4s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sandwich:hover {
+      transform: translateY(-10px);
+      border-color: var(--accent);
+      box-shadow: 0 20px 60px rgba(88, 166, 255, 0.2);
+    }
+
+    /* SERVICES SECTION */
+    .services-section {
+      padding: 80px 0;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .service-card {
+      background: var(--glass);
+      padding: 35px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: 0.3s;
+    }
+
+    .service-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-5px);
+      border-color: var(--accent);
+    }
+
+    .service-card i {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      display: block;
+      color: var(--accent);
     }
 
     /* NEW IMAGE GALLERY */
-    .image-gallery{
-      margin-top:40px;
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:20px;
+    .image-gallery {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
     }
 
-    .gallery-card{
-      background:var(--glass);
-      padding:10px;
-      border-radius:16px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.4);
-      transition:.3s;
+    .gallery-card {
+      background: var(--glass);
+      padding: 10px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transition: .3s;
     }
 
-    .gallery-card:hover{
-      transform:translateY(-6px);
-      box-shadow:0 20px 40px rgba(0,0,0,0.6);
+    .gallery-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     }
 
-    .gallery-card img{
-      width:100%;
-      height:180px;
-      object-fit:cover;
-      border-radius:12px;
+    .gallery-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
     }
 
     /* FORM MODAL */
-    .form-modal{
-      position:fixed;
-      inset:0;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:rgba(3,10,20,0.6);
-      backdrop-filter:blur(6px);
-      opacity:0;
-      pointer-events:none;
-      transition:.3s;
-      z-index:200;
-    }
-    .form-modal.open{
-      opacity:1;
-      pointer-events:auto;
+    .form-modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(3, 10, 20, 0.85);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s;
+      z-index: 2000;
+      padding: 20px;
     }
 
-    .form-card{
-      width:940px;
-      max-width:95%;
-      padding:22px;
-      background:var(--glass);
-      border-radius:14px;
-      display:grid;
-      grid-template-columns:1fr 420px;
-      gap:18px;
-      transform:translateY(30px);
-      transition:.3s;
-    }
-    .form-modal.open .form-card{
-      transform:translateY(0);
+    .form-modal.open {
+      opacity: 1;
+      pointer-events: auto;
     }
 
-    footer{
-      margin-top:40px;
-      text-align:center;
-      color:var(--muted);
-      padding:30px 0;
+    .form-card {
+      width: 1000px;
+      max-width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 40px;
+      background: var(--bg-1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 40px;
+      transform: translateY(30px);
+      transition: .3s;
+    }
+
+    .form-modal.open .form-card {
+      transform: translateY(0);
+    }
+
+    .form-left label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .form-left input,
+    .form-left select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #fff;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .form-left input:focus,
+    .form-left select:focus {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* MOBILE RESPONSIVENESS */
+    @media (max-width: 992px) {
+      .form-card {
+        grid-template-columns: 1fr;
+        padding: 30px;
+      }
+
+      .form-card>div:last-child {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-1);
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .hero h2 {
+        font-size: 2.2rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      color: var(--muted);
+      padding: 40px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
   </style>
 
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav>
-  <div style="display:flex;align-items:center;gap:12px">
-    <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--accent),#6fc3ff);border-radius:8px"></div>
-    <div>
-      <h1 style="font-size:18px;margin:0">SalesPredictor</h1>
-      <small style="color:var(--muted)">SmartStock — Inventory Optimization</small>
-    </div>
-  </div>
-
-  <div style="display:flex;gap:18px">
-    <a href="#home" style="color:var(--muted)">Home</a>
-    <a href="#about" style="color:var(--muted)">About</a>
-    <a href="#predict" style="color:var(--muted)">Predict</a>
-  </div>
-</nav>
-
-<!-- HERO SECTION -->
-<section class="hero" id="home">
-  <div class="inner">
-    <h2>Smart Sales & Inventory Prediction</h2>
-    <p>Predict weekly, monthly and quarterly sales with AI-powered models.</p>
-
-    <div style="display:flex;justify-content:center;margin-top:20px">
-      <div class="sandwich" onclick="openForm()">
-        <h3 style="color:var(--accent)">Make Prediction</h3>
-        <p style="color:var(--muted)">Click to open the AI-powered prediction form</p>
-        <button class="go-btn" style="padding:10px 16px;border:none;background:linear-gradient(90deg,var(--accent),#6fc3ff);border-radius:10px;font-weight:700;cursor:pointer;color:#042033;margin-top:10px">Open Form</button>
+  <!-- NAVBAR -->
+  <nav>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--accent),#6fc3ff);border-radius:8px">
+      </div>
+      <div>
+        <h1 style="font-size:18px;margin:0">SalesPredictor</h1>
+        <small style="color:var(--muted)">SmartStock — Inventory Optimization</small>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- 🌟 NEW IMAGE GALLERY SECTION -->
-<section class="container" style="margin-top:60px">
-  <h3 style="color:var(--accent);text-align:center;margin-bottom:18px">Smart Retail Insights</h3>
-
-  <div class="image-gallery">
-
-    <div class="gallery-card">
-      <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=900&q=80">
-      <p style="margin-top:10px;color:var(--muted)">AI-powered inventory tracking to reduce losses.</p>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
 
-    <div class="gallery-card">
-      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80">
-      <p style="margin-top:10px;color:var(--muted)">Data-driven dashboards for smarter decisions.</p>
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#predict" onclick="openForm(); return false;">Predict</a>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
+    <div class="container">
+      <h2>Smart Sales & <br> Inventory Prediction</h2>
+      <p style="font-size: 1.2rem; color: var(--muted); margin-bottom: 30px;">Predict weekly, monthly and quarterly
+        sales with our industry-grade AI-powered models.</p>
+
+      <div style="display:flex;justify-content:center;">
+        <div class="sandwich" onclick="openForm()">
+          <h3 style="color:var(--accent); margin-bottom: 10px;">Make Prediction</h3>
+          <p style="color:var(--muted); font-size: 0.9rem;">Click to open the AI-powered prediction form and get instant
+            results.</p>
+          <button class="go-btn"
+            style="padding:12px 24px;border:none;background:linear-gradient(90deg,var(--accent),#6fc3ff);border-radius:12px;font-weight:700;cursor:pointer;color:#042033;margin-top:20px; transition: 0.3s;">
+            Generate Forecast <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES SECTION -->
+  <section id="services" class="services-section container">
+    <div class="text-center">
+      <h3 style="color:var(--accent); font-size: 2.5rem; font-weight: 700;">Services Provided</h3>
+      <p style="color: var(--muted); max-width: 600px; margin: 10px auto 40px;">Our end-to-end sales forecasting system
+        provides top-tier retail optimization tools.</p>
     </div>
 
-    <div class="gallery-card">
+    <div class="service-grid">
+      <div class="service-card">
+        <i class="fas fa-chart-line"></i>
+        <h4>Sales Forecasting</h4>
+        <p style="color: var(--muted);">Predict future weekly sales revenue for the next week, month, and 3-month
+          periods using Walmart historical data.</p>
+      </div>
+
+      <div class="service-card">
+        <i class="fas fa-boxes-stacked"></i>
+        <h4>Inventory Optimization</h4>
+        <p style="color: var(--muted);">Automatically calculates safety stock levels and Reorder Points (ROP) to
+          minimize stockouts and overstocking.</p>
+      </div>
+
+      <div class="service-card">
+        <i class="fas fa-robot"></i>
+        <h4>AI Business Suggestions</h4>
+        <p style="color: var(--muted);">Powered by Google Gemini, receiving tailored, data-driven business
+          recommendations to boost your store's efficiency.</p>
+      </div>
+
+      <div class="service-card">
+        <i class="fas fa-desktop"></i>
+        <h4>Interactive Dashboards</h4>
+        <p style="color: var(--muted);">Clean, professional UI built with FastAPI, Jinja2, and Plotly to visualize
+          complex retail data effortlessly.</p>
+      </div>
+
+      <div class="service-card">
+        <i class="fas fa-sync"></i>
+        <h4>Automated Retraining</h4>
+        <p style="color: var(--muted);">CI/CD pipeline using GitHub Actions ensures continuous model updates and
+          industry-grade reliability.</p>
+      </div>
+
+      <div class="service-card">
+        <i class="fas fa-shield-halved"></i>
+        <h4>Production-Ready</h4>
+        <p style="color: var(--muted);">A scalable, industry-standard architecture designed for high-performance retail
+          environments.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SMART RETAIL INSIGHTS -->
+  <section class="container" style="margin-top:60px">
+    <h3 style="color:var(--accent);text-align:center;margin-bottom:18px; font-size: 2rem;">Retail Insights Gallery</h3>
+
+    <div class="image-gallery">
+      <div class="gallery-card">
+        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=900&q=80">
+        <p style="margin-top:15px;color:var(--muted); font-size: 0.9rem;">AI-powered inventory tracking to reduce
+          operation losses.</p>
+      </div>
+
+      <div class="gallery-card">
+        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80">
+        <p style="margin-top:15px;color:var(--muted); font-size: 0.9rem;">Data-driven dashboards for smarter business
+          decisions.</p>
+      </div>
+
+      <div class="gallery-card">
         <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80">
-        <p style="margin-top:10px;color:var(--muted)">Machine Learning models forecasting next-demand.</p>
-        
+        <p style="margin-top:15px;color:var(--muted); font-size: 0.9rem;">Machine Learning models forecasting the next
+          demand wave.</p>
+      </div>
     </div>
+  </section>
 
-  </div>
-</section>
+  <!-- ABOUT -->
+  <section id="about" class="container"
+    style="margin-top:80px;background:rgba(255,255,255,0.02);padding:40px;border-radius:24px; border: 1px solid rgba(255,255,255,0.05);">
+    <h3 style="color:var(--accent); margin-bottom: 20px;">About SmartStock</h3>
+    <p style="color:var(--muted); font-size: 1.1rem; line-height: 1.8;">
+      SmartStock is an advanced analytics platform that bridges the gap between raw retail data and actionable business
+      strategies. By leveraging state-of-the-art LightGBM models and Google Gemini AI, we empower retail managers to
+      make data-backed decisions that drive growth and operational excellence.
+    </p>
+  </section>
 
-<!-- ABOUT -->
-<section id="about" class="container" style="margin-top:50px;background:var(--glass);padding:24px;border-radius:14px">
-  <h3 style="color:var(--accent)">About SmartStock</h3>
-  <p style="color:var(--muted)">
-    SmartStock Inventory Optimization uses machine learning to forecast sales, calculate reorder points,
-    prevent over/under stock, and generate AI recommendations for retailers.
-  </p>
-</section>
-
-<!-- FORM MODAL -->
-<div class="form-modal" id="formModal" aria-hidden="true">
+  <!-- FORM MODAL -->
+  <div class="form-modal" id="formModal" aria-hidden="true">
     <div class="form-card" role="dialog" aria-modal="true" aria-labelledby="formTitle">
-  
+
       <!-- LEFT FORM SECTION -->
       <div class="form-left">
         <h3 id="formTitle" style="margin-bottom:6px;color:var(--accent)">Enter Prediction Parameters</h3>
         <p style="color:var(--muted)">Provide store and item details below. (Names preserved — do not change)</p>
-  
+
         <form id="predictForm" method="POST" action="/" style="margin-top:16px">
-  
+
           <!-- GRID ROW 1 -->
           <div class="form-row" style="
             display:grid;
@@ -229,13 +458,13 @@
               <label for="store">Store Number</label>
               <input id="store" name="store" type="number" placeholder="Enter Store ID" required>
             </div>
-  
+
             <div>
               <label for="dept">Department Number</label>
               <input id="dept" name="dept" type="number" placeholder="Enter Dept No." required>
             </div>
           </div>
-  
+
           <!-- GRID ROW 2 -->
           <div class="form-row" style="
             margin-top:14px;
@@ -247,13 +476,13 @@
               <label for="size">Store Size</label>
               <input id="size" name="size" type="number" placeholder="e.g., 150000" required>
             </div>
-  
+
             <div>
               <label for="store_type">Store Type (A/B/C)</label>
               <input id="store_type" name="store_type" type="text" maxlength="1" placeholder="A / B / C" required>
             </div>
           </div>
-  
+
           <!-- GRID ROW 3 -->
           <div class="form-row" style="
             margin-top:14px;
@@ -270,76 +499,82 @@
                 <option value="3months">Next 3 Months</option>
               </select>
             </div>
-  
+
             <div>
               <label for="current_stock">Current Stock</label>
               <input id="current_stock" name="current_stock" type="number" placeholder="Available Units" required>
             </div>
           </div>
-  
+
           <!-- GRID ROW 4 -->
           <div style="margin-top:14px">
             <label for="lead_time">Lead Time (Days)</label>
             <input id="lead_time" name="lead_time" type="number" placeholder="e.g., 5 Days" required>
           </div>
-  
+
           <!-- BUTTONS -->
           <div class="submit-row" style="
             margin-top:20px;
             display:flex;
             gap:12px;
           ">
-            <button type="submit" class="btn-primary-custom"
-              style="padding:10px 16px;background:linear-gradient(90deg,var(--accent),#6fc3ff);
+            <button type="submit" class="btn-primary-custom" style="padding:10px 16px;background:linear-gradient(90deg,var(--accent),#6fc3ff);
               border:none;border-radius:10px;font-weight:600;color:#042033;">
               Predict & Show Results
             </button>
-  
+
             <button type="button" class="btn-ghost" onclick="closeForm()"
               style="padding:10px 16px;border-radius:10px;border:1px solid var(--muted);color:var(--muted);background:none;">
               Cancel
             </button>
           </div>
-  
+
         </form>
       </div>
-  
+
       <!-- RIGHT IMAGE -->
       <div>
         <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=900&q=80"
           style="width:100%;border-radius:12px">
       </div>
-  
+
     </div>
   </div>
-  
 
-<!-- FOOTER -->
-<footer>
-  © 2025 SalesPredictor — SmartStock Project  
-  <br>
-  <span style="font-size:18px;color:white;font-family:'Playfair Display',serif">Abhishek Yaduwanshi</span>
-</footer>
 
-<script>
-  const modal = document.getElementById("formModal");
+  <!-- FOOTER -->
+  <footer>
+    © 2025 SalesPredictor — SmartStock Project
+    <br>
+    <span style="font-size:18px;color:white;font-family:'Playfair Display',serif">Abhishek Yaduwanshi</span>
+  </footer>
 
-  function openForm(){
-    modal.classList.add("open");
-  }
+  <script>
+    const modal = document.getElementById("formModal");
+    const navLinks = document.getElementById("navLinks");
 
-  function closeForm(){
-    modal.classList.remove("open");
-  }
+    function toggleMenu() {
+      navLinks.classList.toggle("active");
+    }
 
-  window.addEventListener("keydown",e=>{
-    if(e.key==="Escape") closeForm();
-  });
+    function openForm() {
+      modal.classList.add("open");
+      navLinks.classList.remove("active");
+    }
 
-  modal.addEventListener("click",e=>{
-    if(e.target === modal) closeForm();
-  });
-</script>
+    function closeForm() {
+      modal.classList.remove("open");
+    }
+
+    window.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeForm();
+    });
+
+    modal.addEventListener("click", e => {
+      if (e.target === modal) closeForm();
+    });
+  </script>
 
 </body>
+
 </html>
