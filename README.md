@@ -1,4 +1,4 @@
-# 🛒 Walmart Sales Forecasting & Inventory Optimization System
+# 🛒 Infosys SmartStock Inventory Optimization for Retail Store over Walmart Sales Forecasting dataset
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-API-green)
@@ -6,7 +6,30 @@
 ![Status](https://img.shields.io/badge/Status-Production--Ready-success)
 
 ---
+## 📌 Project Demo Images
 
+### 🖼️ Landing Page
+<img width="1470" height="836" alt="landing page" src="https://github.com/user-attachments/assets/1a4c40d5-4fa3-40e4-b4f0-27a2fd6dc834" />
+
+
+
+### 📊 Input From user
+<img width="1394" height="787" alt="input fields" src="https://github.com/user-attachments/assets/a618c157-f200-4009-99c6-9f964f9e22b9" />
+
+
+
+### 📊 Dashboard (Prediction + Charts)
+<img width="1470" height="836" alt="Dashboard" src="https://github.com/user-attachments/assets/bc412138-0cbf-4841-b6d1-8149e4b90a20" />
+
+
+
+### 🤖 Gemini AI Summary Section
+<img width="1470" height="835" alt="Gemini suggestion" src="https://github.com/user-attachments/assets/afff3a51-83b3-4716-a7f6-5ecca034c45e" />
+
+---
+## Dataset Used
+Dataset: **Walmart Sales Forecasting (Kaggle)**
+---
 ## 📌 Project Overview
 
 This project is an **end-to-end sales forecasting system** built using real Walmart historical data.
