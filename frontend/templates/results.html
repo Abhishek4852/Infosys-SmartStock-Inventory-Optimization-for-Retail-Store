@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Retail – Prediction Results</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS (Animate on Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0d1b2a;
+            --bg-card: #1b263b;
+            --accent: #4da3ff;
+            --text-light: #e0e6ed;
+            --text-muted: #9bb4c7;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            font-family: "Poppins", sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: linear-gradient(90deg, #001f54, #003b95, #005eff);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        /* PAGE TITLE */
+        .page-title {
+            color: var(--accent);
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(77,163,255,0.6);
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        /* DATA CARDS */
+        .data-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border: 1px solid #23344d;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(77,163,255,0.18), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .data-card:hover::before {
+            opacity: 1;
+        }
+
+        .data-card:hover {
+            transform: perspective(700px) rotateX(3deg) rotateY(-3deg) scale(1.03);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+            border-color: var(--accent);
+        }
+
+        .data-card h5 {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* GEMINI BOX */
+        .gemini-box {
+            background: var(--bg-card);
+            border-left: 6px solid var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+        }
+
+        .summary-heading {
+            margin-top: 18px;
+            margin-bottom: 8px;
+            font-size: 18px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .gemini-box li {
+            list-style: none;
+            margin-bottom: 8px;
+            padding-left: 14px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .gemini-box li::before {
+            content: "➤";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .gemini-box li:hover {
+            transform: translateX(6px);
+            color: var(--accent);
+        }
+
+        .critical {
+            color: #ff4d4d !important;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+
+        /* BUTTON */
+        .btn-secondary {
+            background: var(--accent);
+            border: none;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .btn-secondary:hover {
+            background: #1b8cff;
+            color: #fff;
+        }
+
+        .btn-secondary:active {
+            animation: pulse 0.4s;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(77,163,255,0.6); }
+            70% { box-shadow: 0 0 0 12px rgba(77,163,255,0); }
+            100% { box-shadow: 0 0 0 0 rgba(77,163,255,0); }
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #001f54;
+            color: var(--text-light);
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInDown {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">🛒 Smart Retail AI</a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    <h2 class="text-center page-title mb-4">Prediction Results & AI Recommendations</h2>
+
+    <!-- PREDICTION CARDS -->
+    <div class="row g-4">
+        {% for item in predictions %}
+        <div class="col-md-4" data-aos="zoom-in">
+            <div class="data-card">
+                <h5>{{ item['Date'] }}</h5>
+                <p><strong>Predicted Sales:</strong> {{ item['Predicted_Sales'] }}</p>
+                <p><strong>Stock Status:</strong> {{ item['Stock_Status'] }}</p>
+                <p><strong>Out of Stock Risk:</strong> {{ item['Out_of_Stock_Risk'] }}</p>
+                <p><strong>Reorder Point:</strong> {{ item['Reorder_Point'] }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- CHARTS -->
+    <h3 class="mt-5 page-title">Visual Insights</h3>
+
+    <div class="data-card mt-3" data-aos="fade-right">
+        <h5 class="fw-bold">📈 Predicted Sales Trend</h5>
+        <div id="sales_plot" data-aos="zoom-in"></div>
+    </div>
+
+    <div class="data-card mt-4" data-aos="fade-left">
+        <h5 class="fw-bold">📊 Reorder Point Chart</h5>
+        <div id="stock_plot" data-aos="zoom-in"></div>
+    </div>
+
+    <!-- AI SUMMARY -->
+    <h3 class="mt-5 page-title">AI Summary (Gemini)</h3>
+
+    <div class="gemini-box mt-3" data-aos="fade-up">
+        {% for line in summary_lines %}
+            {% if line in [
+                "Expected Sales Trend",
+                "Stockout Risk",
+                "Safety Stock Need",
+                "Reorder Point Details",
+                "Final Action Plan"
+            ] %}
+                <h4 class="summary-heading">{{ line }}</h4>
+            {% else %}
+                {% if "[CRITICAL]" in line or "[URGENT]" in line or "[HIGH RISK]" in line %}
+                    <li class="critical">{{ line }}</li>
+                {% else %}
+                    <li>{{ line }}</li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <a href="/" class="btn btn-secondary mt-4">⬅ Back to Home</a>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer text-center">
+    © 2025 Smart Retail AI | Developed by  
+    <span style="font-weight: 700; color: var(--accent);">
+        Abhishek Yaduwanshi
+    </span>
+</div>
+
+<!-- AOS SCRIPT -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 900,
+        once: true,
+        easing: "ease-in-out"
+    });
+</script>
+
+<!-- PLOTLY -->
+<script>
+    Plotly.newPlot("sales_plot", {{ graphJSON_sales | safe }});
+    Plotly.newPlot("stock_plot", {{ graphJSON_stock | safe }});
+</script>
+
+</body>
+</html>

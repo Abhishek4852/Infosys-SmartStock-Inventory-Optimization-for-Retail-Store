@@ -1,0 +1,17 @@
+pandas
+numpy
+scikit-learn
+lightgbm
+xgboost
+prophet
+fastapi
+uvicorn
+python-multipart
+google-generativeai
+matplotlib
+seaborn
+pickle-mixin
+joblib
+python-dotenv
+jinja2
+plotly

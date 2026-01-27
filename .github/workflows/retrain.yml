@@ -1,0 +1,39 @@
+name: Sales Forecast Retraining
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Weekly on Sunday midnight
+  push:
+    paths:
+      - 'data/raw/**'
+  workflow_dispatch:
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Retraining Pipeline
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python retraining/retrain_pipeline.py
+
+      - name: Commit and Push New Models
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add model_artifacts/*.pkl model_artifacts/*.json
+          git commit -m "Automated model retraining [skip ci]" || echo "No changes to commit"
+          git push
