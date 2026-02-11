@@ -6,6 +6,11 @@
 ![Status](https://img.shields.io/badge/Status-Production--Ready-success)
 
 ---
+
+## 🎥 Project Demo
+
+Watch the project walkthrough here: [YouTube Link](https://www.youtube.com/watch?v=dRS5JuUvReA)
+---
 ## 📌 Project Demo Images
 
 ### 🖼️ Landing Page
